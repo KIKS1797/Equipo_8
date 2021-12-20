@@ -3,3 +3,6 @@
 Codigo realizado por:
                       -Enrique Zetina Martinez
                       -Jordán Otoniel Ulloa Flores 
+
+
+Video Practica T6: https://youtu.be/itBTMfY-Dr8
