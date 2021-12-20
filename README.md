@@ -5,4 +5,5 @@ Codigo realizado por:
                       -Jordán Otoniel Ulloa Flores 
 
 
-Video Practica T6: https://youtu.be/itBTMfY-Dr8
+Video Practica T6: https://youtu.be/itBTMfY-Dr8 
+Top module file "Mips_AddaddiWrap.v"
