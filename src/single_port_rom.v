@@ -14,7 +14,7 @@ module single_port_rom// Quartus Prime Verilog Template, Single Port ROM
 	// this design will not compile.
 	initial
 		begin
-			$readmemb("C:/Proyectos Iteso/Mips_multi/src/single_port_rom_init.txt", rom);
+			$readmemb("C:/Proyectos Iteso/Mips_multi/src/binario_t7.txt", rom);
 			$display("Valor de q %p", rom);
 		end
 	

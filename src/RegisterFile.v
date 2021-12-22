@@ -13,7 +13,7 @@ module RegisterFile
 	input [4:0] 			Write_Register_i,//
 	input [4:0] 			Read_Register_1_i,//
 	input [4:0] 			Read_Register_2_i,//
-	input [width32-1:0]  Write_Data_i,
+	input [width32-1:0]  Write_Data_i, SW1, SW2,//SW1, SW2 se eleimiran estan como estrada de lo smux
 	
 	output [width32-1:0] Read_Data_1_o,//
 	output [width32-1:0] Read_Data_2_o,//
@@ -75,12 +75,12 @@ assign r31 = w31;
 	//demux 32to1 obtiene el valor en bianrio de 5bits, y selecciona la salida de 32bits para read data 1
 	Mux32to1 mux0 (.Sel(Read_Register_1_i), .Data_out(Read_Data_1_o), .I0(w0),.I1(w1),.I2(w2),.I3(w3),.I4(w4),
 	.I5(w5),.I6(w6),.I7(w7),.I8(w8),.I9(w9),.I10(w10),.I11(w11),.I12(w12),.I13(w13),.I14(w14),
-	.I15(w15),.I16(w16),.I17(w17),.I18(w18),.I19(w19),.I20(w20),.I21(w21),.I22(w22),.I23(w23),
+	.I15(w15),.I16(w16),.I17(w17),.I18(w18),.I19( SW1       /*w19*/),.I20(w20),.I21(w21),.I22(w22),.I23(w23),
 	.I24(w24),.I25(w25),.I26(w26),.I27(w27),.I28(w28),.I29(w29),.I30(w30),.I31(w31));
 	//demux 32to1 obtiene el valor en bianrio de 5bits, y selecciona la salida de 32bits para read data 2
 	Mux32to1 mux1 (.Sel(Read_Register_2_i), .Data_out(Read_Data_2_o), .I0(w0),.I1(w1),.I2(w2),.I3(w3),.I4(w4),
 	.I5(w5),.I6(w6),.I7(w7),.I8(w8),.I9(w9),.I10(w10),.I11(w11),.I12(w12),.I13(w13),.I14(w14),
-	.I15(w15),.I16(w16),.I17(w17),.I18(w18),.I19(w19),.I20(w20),.I21(w21),.I22(w22),.I23(w23),
+	.I15(w15),.I16(w16),.I17(w17),.I18(w18),.I19( SW2      /*w19*/),.I20(w20),.I21(w21),.I22(w22),.I23(w23),
 	.I24(w24),.I25(w25),.I26(w26),.I27(w27),.I28(w28),.I29(w29),.I30(w30),.I31(w31));
 	
 endmodule 

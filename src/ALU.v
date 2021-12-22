@@ -35,7 +35,7 @@ always @ (y)
 	begin
 		case (y)
 			32'b00000000_00000000_00000000 : Z = 1'b1;
-			default:		Z = 1'b0;
+			default: Z = 1'b0;
 		endcase
 	end
 endmodule 

@@ -14,8 +14,10 @@ module Mips_multi(
 	input ALU_srcA_mux,
 	input [1:0] ALU_srcB_mux,
 	input [2:0] ALU_control,
-	input Pc_src_mux,
+	input [1:0] Pc_src_mux,
 	input Branch,
+	input ALU_reg_write, 
+	input [31:0] SW1, SW2,
 	
 	output [7:0] gpio_o,
 	output [5:0] Funct, Op,
@@ -26,7 +28,7 @@ module Mips_multi(
 
 wire [31:0] PC_o, Mem_o,Fetch_parts_o, Fetch_no_mod,
 Mem_i, Mux_alu_o, ALU_out, RF_o_B, data_wd3,
-data_o_A, data_o_B, RF_o_A, SrcA_ALU_in, SrcB_ALU_in, 
+data_o_A, data_o_B, RF_o_A, SrcA_ALU_in, SrcB_ALU_in, shift2, PCjump,Sign_ex_0,shift2_0, salid_t7,
 ALU_result, Sign_ex;
 wire [4:0] in_A3;
 wire Z, w1, Pc_en;
@@ -79,7 +81,12 @@ mux2to1a mux_WD3 (.I1(Fetch_no_mod), //mux for WD3
 						.I0(ALU_out), 
 						.Sel(Mem_reg_mux), 
 						.Data_out(data_wd3));
-						
+////////////////////////////////////////////////////////////////					
+/*mux2to1a Mux_T7  (.I1(Fetch_no_mod), //mux T7 implementation 
+						.I0(ALU_out), 
+						.Sel(Mem_reg_mux), 
+						.Data_out(data_wd3));*/
+//////////////////////////////////////////////////////////////						
 RegisterFile reg_file (.clk(clk), 
 						.enable(1'b1), 
 						.Reg_Write_i(Reg_write), 
@@ -121,10 +128,13 @@ RegisterFile reg_file (.clk(clk),
 .r28(r280),
 .r29(r290),
 .r30(r300),
-.r31(r310));					
+.r31(r310),
+.SW1(SW1),.SW2(SW2));					
 //////////////////////////////////////////////77
 sign_extend sign1 (.y(Sign_ex), 
 		.x(Fetch_parts_o[15:0]));
+
+
 
 assign signimm_test = PC_o;//ALU_result  Sign_ex
 assign signimm_test1 = SrcA_ALU_in;
@@ -132,6 +142,10 @@ assign signimm_test2 = SrcB_ALU_in;//
 	
 ///reservado para el sign extend, signImm
 /////////////////////////////////////////////////
+shift2left shift_left (
+				.in(Sign_ex),
+				.out(shift2)
+				);
 						
 One_register two_input_reg1 (.clk(clk), // Register File, register out1
 						.rst(reset), 
@@ -149,11 +163,12 @@ mux2to1a PC_SrcA (.I1(RF_o_A), //
 						.I0(PC_o), 
 						.Sel(ALU_srcA_mux), 
 						.Data_out(SrcA_ALU_in));
+						
 
 mux4to1 PC_SrcB (.I0(RF_o_B), //
 						.I1(4),
-						.I2(Sign_ex),
-						.I3(/*shift 2bits*/0),
+						.I2(Sign_ex),// se agrega la salida el mux de T7
+						.I3(shift2),
 						.Sel(ALU_srcB_mux), 
 						.Data_out(SrcB_ALU_in));
 						
@@ -161,18 +176,26 @@ ALU alu1 		(.y(ALU_result), // ZERO out pending
 						.a(SrcA_ALU_in), //32'b00000000_00000000_00000000_00000111), //pending       SrcA_ALU_in
 						.b(SrcB_ALU_in), //pending
 						//.c_in(0), ///////////////7
-						.select(/*ALU_control*/4'b0010),
+						.select(/*ALU_control*/3'b010),
 						.Z(Z));
+						
+shift2left shift_left_JUMP (
+				.in({6'b000000,Fetch_parts_o[25:0]}),
+				.out(shift2_0)
+				);
 						
 assign gpio_o = ALU_result[7:0];
 												
 One_register ALU_out_reg (.clk(clk), // Register ALU out
 						.rst(reset), 
-						.enable(1'b1), 
+						.enable(ALU_reg_write), 
 						.data(ALU_result), 
 						.one_register_o(ALU_out));
 						
-mux2to1a ALU_o (.I1(ALU_out), //
+assign PCjump = {PC_o[31:28],shift2_0[27:0]};
+						
+mux3to1a ALU_o_mux (.I2(PCjump),
+						.I1(ALU_out), //
 						.I0(ALU_result), 
 						.Sel(Pc_src_mux), 
 						.Data_out(Mux_alu_o));

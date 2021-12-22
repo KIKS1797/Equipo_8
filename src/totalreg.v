@@ -29,7 +29,9 @@ registers32 R15(.Q(Q15), .clk(clk), .data(data), .regwrite(regwrite), .cp(cp[15]
 registers32 R16(.Q(Q16), .clk(clk), .data(data), .regwrite(regwrite), .cp(cp[16]),.rst_n(rst_n));
 registers32 R17(.Q(Q17), .clk(clk), .data(data), .regwrite(regwrite), .cp(cp[17]),.rst_n(rst_n));
 registers32 R18(.Q(Q18), .clk(clk), .data(data), .regwrite(regwrite), .cp(cp[18]),.rst_n(rst_n));
+//////////////////////
 registers32 R19(.Q(Q19), .clk(clk), .data(data), .regwrite(regwrite), .cp(cp[19]),.rst_n(rst_n));
+/////////////////////7
 registers32 R20(.Q(Q20), .clk(clk), .data(data), .regwrite(regwrite), .cp(cp[20]),.rst_n(rst_n));
 registers32 R21(.Q(Q21), .clk(clk), .data(data), .regwrite(regwrite), .cp(cp[21]),.rst_n(rst_n));
 registers32 R22(.Q(Q22), .clk(clk), .data(data), .regwrite(regwrite), .cp(cp[22]),.rst_n(rst_n));
